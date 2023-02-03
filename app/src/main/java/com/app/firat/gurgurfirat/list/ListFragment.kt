@@ -7,7 +7,10 @@ import com.app.firat.gurgurfirat.base.BaseFragment
 import com.app.firat.gurgurfirat.databinding.FragmentListBinding
 import com.app.firat.gurgurfirat.list.adapter.SatelliteAdapter
 import com.app.firat.gurgurfirat.model.SatelliteListItemModel
+import com.app.firat.gurgurfirat.util.ReadExt
+import com.app.firat.gurgurfirat.util.onTextChanged
 import com.app.firat.gurgurfirat.util.setDivider
+import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -15,25 +18,26 @@ import dagger.hilt.android.AndroidEntryPoint
 class ListFragment : BaseFragment<FragmentListBinding>(FragmentListBinding::inflate) {
 
     private lateinit var satelliteAdapter : SatelliteAdapter
-    private val satelliteList = arrayListOf<SatelliteListItemModel>()
 
     override fun initView() {
         setupAdapter()
         fetchList()
+
+        binding.searchBar.onTextChanged { text->
+            satelliteAdapter.filter.filter(text)
+        }
+
     }
 
     override fun initObservers() {
     }
 
-    //attempt for adapter and vh
-    private fun fetchList(){
-        satelliteList.clear()
-        satelliteList.add(SatelliteListItemModel(1,false,"Starship-1"))
-        satelliteList.add(SatelliteListItemModel(2,true,"Dragon-1"))
-        satelliteList.add(SatelliteListItemModel(3,true,"Starship-3"))
 
+    private fun fetchList(){
+        val type = object : TypeToken<List<SatelliteListItemModel>>() {}.type
+        val result: List<SatelliteListItemModel> = ReadExt.readDataListToList(requireContext(),"satellite-list.json",type)
         satelliteAdapter.let {
-           it.submitList(satelliteList)
+           it.putData(result.toMutableList())
         }
     }
 
