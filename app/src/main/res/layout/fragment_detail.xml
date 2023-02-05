@@ -1,15 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".detail.DetailFragment">
+<layout>
+    <data>
+        <variable
+            name="satellite_detail"
+            type="com.app.firat.gurgurfirat.model.SatelliteDetailItemModel" />
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/tv"
+        <variable
+            name="satellite_position"
+            type="com.app.firat.gurgurfirat.model.PositionX" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        tools:context=".ui.detail.DetailFragment">
 
-</FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <TextView
+                android:id="@+id/name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/hind_medium"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimen30"
+                tools:text="Starship-1" />
+
+            <TextView
+                android:id="@+id/date_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/hind_regular"
+                android:textSize="@dimen/dimen15"
+                setDate="@{satellite_detail.first_flight}"
+                tools:text="01.12.2012" />
+
+            <TextView
+                android:id="@+id/height_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen40"
+                setHeightMass="@{satellite_detail}"
+                android:textColor="@color/black"
+                tools:text="TextView" />
+
+            <TextView
+                android:id="@+id/cost_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen10"
+                setCost="@{satellite_detail}"
+                android:textColor="@color/black"
+                tools:text="TextView" />
+
+            <TextView
+                android:id="@+id/last_position_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen10"
+                android:textColor="@color/black"
+                tools:text="TextView" />
+
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,4 +1,4 @@
-package com.app.firat.gurgurfirat.list.adapter
+package com.app.firat.gurgurfirat.ui.list.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

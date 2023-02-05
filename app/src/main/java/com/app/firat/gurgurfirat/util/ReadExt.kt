@@ -5,7 +5,6 @@ import android.util.Log
 import com.google.gson.GsonBuilder
 import java.io.IOException
 import java.io.InputStream
-import java.lang.Exception
 import java.lang.reflect.Type
 
 object ReadExt {
@@ -24,22 +23,22 @@ object ReadExt {
 
 
     fun <T> readDataListToList(context: Context, jsonPath: String, type: Type): List<T> {
-        var json: String? = try {
-            val inputStream: InputStream = context.assets.open(jsonPath)
-            val size: Int = inputStream.available()
-            val buffer = ByteArray(size)
-            inputStream.read(buffer)
-            inputStream.close()
-            String(buffer, Charsets.UTF_8)
-        } catch (ex: IOException) {
-            ex.printStackTrace()
-            null
-        }
+        var json: String? = assetToString(context, fileName = jsonPath)
         val newList : List<T> = parseArray(
             json = json.toString(),
             typeToken = type
         )
         return newList
+    }
+
+
+    fun assetToString(context: Context,fileName : String): String? {
+
+        return  context.assets.open(fileName).bufferedReader().use{
+            it.readText()
+        }
+
+
     }
 
 

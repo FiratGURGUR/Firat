@@ -7,19 +7,26 @@
 
     <fragment
         android:id="@+id/listFragment"
-        android:name="com.app.firat.gurgurfirat.list.ListFragment"
+        android:name="com.app.firat.gurgurfirat.ui.list.ListFragment"
         android:label="fragment_list"
         tools:layout="@layout/fragment_list" />
 
     <fragment
         android:id="@+id/detailFragment"
-        android:name="com.app.firat.gurgurfirat.detail.DetailFragment"
+        android:name="com.app.firat.gurgurfirat.ui.detail.DetailFragment"
         android:label="fragment_detail"
         tools:layout="@layout/fragment_detail">
 
         <argument
             android:name="id"
-            app:argType="integer"/>
+            app:argType="integer"
+            app:nullable="false"
+            android:defaultValue="1" />
+
+        <argument
+            android:name="satellite_name"
+            app:argType="string"
+            app:nullable="true" />
 
     </fragment>
 

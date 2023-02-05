@@ -1,10 +1,11 @@
-package com.app.firat.gurgurfirat
+package com.app.firat.gurgurfirat.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
+import com.app.firat.gurgurfirat.R
 import com.app.firat.gurgurfirat.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
