@@ -7,7 +7,6 @@ import androidx.databinding.BindingAdapter
 import com.app.firat.gurgurfirat.R
 import com.app.firat.gurgurfirat.model.SatelliteDetailItemModel
 import com.bumptech.glide.Glide
-import java.text.DecimalFormat
 
 object ViewBindingAdapter {
 
@@ -26,8 +25,8 @@ object ViewBindingAdapter {
 
     @JvmStatic
     @BindingAdapter("setHeightMass")
-    fun setHeightMass(view: TextView, item: SatelliteDetailItemModel) {
-        val newText = SpannableString( "Height/Mass:${item.height}/${item.mass}")
+    fun setHeightMass(view: TextView, item: SatelliteDetailItemModel?) {
+        val newText = SpannableString( "Height/Mass:${item?.height}/${item?.mass}")
             .bold("Height/Mass:")
         view.text = newText
     }
@@ -35,15 +34,15 @@ object ViewBindingAdapter {
 
     @JvmStatic
     @BindingAdapter("setDate")
-    fun setDate(view: TextView, date: String) {
-        view.text = date.formatToDate("yyyy-MM-dd").formatToString("dd.MM.yyyy")
+    fun setDate(view: TextView, date: String?) {
+        view.text = date?.formatToDate("yyyy-MM-dd")?.formatToString("dd.MM.yyyy") ?: ""
     }
 
 
     @JvmStatic
     @BindingAdapter("setCost")
-    fun setCost(view: TextView, item: SatelliteDetailItemModel) {
-        val costPerLaunch = item.cost_per_launch.formatDecimalSeparator()
+    fun setCost(view: TextView, item: SatelliteDetailItemModel?) {
+        val costPerLaunch = item?.cost_per_launch?.formatDecimalSeparator()
         val newText = SpannableString( "Cost:${costPerLaunch}")
             .bold("Cost:")
         view.text = newText

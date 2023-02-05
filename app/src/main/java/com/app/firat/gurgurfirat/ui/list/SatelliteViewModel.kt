@@ -6,16 +6,24 @@ import android.text.SpannableString
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.app.firat.gurgurfirat.data.SatelliteRepository
 import com.app.firat.gurgurfirat.model.*
 import com.app.firat.gurgurfirat.util.ReadExt
 import com.app.firat.gurgurfirat.util.bold
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SatelliteViewModel  @Inject constructor(private val context: Context) : ViewModel() {
+class SatelliteViewModel  @Inject constructor(
+    private val context: Context,
+    private val repository: SatelliteRepository
+) : ViewModel() {
 
     private val currentPositionIndex = MutableLiveData(0)
 
@@ -31,9 +39,12 @@ class SatelliteViewModel  @Inject constructor(private val context: Context) : Vi
     private val positionXY = MutableLiveData<PositionX>()
     val positionXYResponse: LiveData<PositionX> = positionXY
 
+    private val satelliteDaoDetail = MutableLiveData<SatelliteDetailItemModel>()
+    val satelliteDaoDetailResponse: MutableLiveData<SatelliteDetailItemModel> = satelliteDaoDetail
+
     fun getSatelliteListFromJson(){
         val type = object : TypeToken<List<SatelliteListItemModel>>() {}.type
-        satelliteList.value =   ReadExt.readDataListToList(context,"satellite-list.json",type)
+        satelliteList.postValue(ReadExt.readDataListToList(context,"satellite-list.json",type))
     }
 
 
@@ -41,7 +52,7 @@ class SatelliteViewModel  @Inject constructor(private val context: Context) : Vi
         val type = object : TypeToken<List<SatelliteDetailItemModel>>() {}.type
         val detailList = arrayListOf<SatelliteDetailItemModel>()
         detailList.addAll(ReadExt.readDataListToList(context,"satellite-detail.json",type))
-        satelliteDetail.value = detailList.find { s->s.id == id }
+        satelliteDetail.postValue(detailList.find { s->s.id == id })
     }
 
 
@@ -49,7 +60,7 @@ class SatelliteViewModel  @Inject constructor(private val context: Context) : Vi
         val json = ReadExt.assetToString(context, "positions.json")
         val gson = Gson()
         val model = gson.fromJson(json, PositionItemModel::class.java)
-        positionList.value = model.list
+        positionList.postValue(model.list)
     }
 
 
@@ -60,6 +71,24 @@ class SatelliteViewModel  @Inject constructor(private val context: Context) : Vi
             currentPositionIndex.value = currentPositionIndex.value?.plus(1)
         }else{
             currentPositionIndex.value = 0
+        }
+    }
+
+
+    fun checkItem(id: Int){
+        CoroutineScope(Dispatchers.IO).launch {
+           val item : SatelliteDetailItemModel =  repository.getSatellite(id)
+           if (item != null){
+               satelliteDaoDetail.postValue(item)
+           }else{
+               getSatelliteDetailFromJson(id)
+           }
+        }
+    }
+
+    fun addSatellite(item : SatelliteDetailItemModel){
+        CoroutineScope(Dispatchers.IO).launch {
+            repository.addSatellite(item)
         }
     }
 
